@@ -8,6 +8,7 @@ def_t = Optional[T]
 
 
 def safely_get_value(dct: Mapping, key: Any, default: def_t = None) -> ret_t:
+    """Return value that corresponds to a specific key or None"""
     if key in dct:
         return dct[key]
     else:
