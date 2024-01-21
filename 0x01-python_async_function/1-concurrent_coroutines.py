@@ -8,9 +8,9 @@ wait_random = __import__('0-basic_async_syntax').wait_random
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
     """coroutine that call wait_random n times"""
-    random_delay_list = []
+    random_delay_list: List[float] = []
 
     for i in range(n):
         random_delay_list.append(await wait_random(max_delay))
 
-    return random_delay_list
+    return sorted(random_delay_list)
