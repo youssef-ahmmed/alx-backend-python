@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Unit testing for utils module"""
 import unittest
-from typing import Dict
+from unittest.mock import patch
 
 from parameterized import parameterized
+
 from utils import access_nested_map, get_json
-from unittest.mock import patch, Mock
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -39,7 +39,7 @@ class TestGetJson(unittest.TestCase):
         ("https://holberton.io", {"payload": False})
     ])
     @patch('requests.get')
-    def test_get_json(self, test_url: str, test_payload: Dict, mock_get: Mock):
+    def test_get_json(self, test_url, test_payload, mock_get):
         """Test with mock get request"""
         mock_get.json.return_value = test_payload
         mock_get.return_value = mock_get
