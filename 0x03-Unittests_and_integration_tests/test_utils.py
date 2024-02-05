@@ -1,75 +1,69 @@
 #!/usr/bin/env python3
-"""Unit testing for utils module"""
-import unittest
-from typing import Dict
-from unittest.mock import patch, Mock
+"""Defines test_utils module"""
 
+import unittest
+from unittest.mock import Mock, patch
 from parameterized import parameterized
 
 from utils import *
 
 
 class TestAccessNestedMap(unittest.TestCase):
-    """Class for testing nested map function"""
-
+    """Class to test access_nested_map function"""
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2)
     ])
-    def test_access_nested_map(self, nested_map, path, expected_result):
-        """Test using parameterized to minimize duplications"""
-        result = access_nested_map(nested_map, path)
-        self.assertEqual(result, expected_result)
+    def test_access_nested_map(self, nested_map, path, result):
+        """Test access_nested_map"""
+        self.assertEqual(access_nested_map(nested_map, path), result)
 
     @parameterized.expand([
         ({}, ("a",)),
         ({"a": 1}, ("a", "b"))
     ])
     def test_access_nested_map_exception(self, nested_map, path):
-        """Test Key Error exception"""
+        """Test access_nested_map with keyError exception"""
         with self.assertRaises(KeyError):
             access_nested_map(nested_map, path)
 
 
 class TestGetJson(unittest.TestCase):
-    """Class for testing get json from a request"""
-
+    """Class to test get_json"""
     @parameterized.expand([
-        ("https://example.com", {"payload": True}),
-        ("https://holberton.io", {"payload": False})
+        ("http://example.com", {"payload", True}),
+        ("http://holberton.io", {"payload": False})
     ])
     @patch('requests.get')
-    def test_get_json(self, test_url: str, test_payload: Dict, mock_get: Mock):
-        """Test with mock get request"""
-        mock_get.json.return_value = test_payload
-        mock_get.return_value = mock_get
+    def test_get_json(self, test_url, test_payload, get_mock):
+        """Test get_json with two different urls"""
+        get_mock.json.return_value = test_payload
+        get_mock.return_value = get_mock
 
         self.assertEqual(get_json(test_url), test_payload)
-        mock_get.assert_called_with(test_url)
+        get_mock.assert_called_once_with(test_url)
 
 
 class TestMemoize(unittest.TestCase):
-    """Class for testing memoize util"""
-
+    """Class to test memoize decorator"""
     def test_memoize(self):
-        """test memoize function"""
+        """Test memoize decorator"""
         class TestClass:
             """Implement test class"""
             def a_method(self):
-                """a_method"""
                 return 42
 
             @memoize
             def a_property(self):
-                """a_property"""
                 return self.a_method()
 
-        with patch.object(TestClass, 'a_method',
-                          return_value=lambda: 42) as a_mock:
-            test = TestClass()
-            self.assertEqual(test.a_property(), 42)
-            self.assertEqual(test.a_property(), 42)
+        with patch.object(TestClass, 'a_method') as a_mock:
+            a_mock.return_value = lambda: 42
+
+            my_test = TestClass()
+            self.assertEqual(my_test.a_property(), 42)
+            self.assertEqual(my_test.a_property(), 42)
 
             a_mock.assert_called_once()
 
