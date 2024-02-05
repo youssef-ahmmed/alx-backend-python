@@ -4,8 +4,10 @@
 import unittest
 from typing import Dict
 from unittest.mock import patch, Mock, PropertyMock
+
 from parameterized import parameterized
-from client import get_json, GithubOrgClient
+
+from client import GithubOrgClient
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -62,6 +64,12 @@ class TestGithubOrgClient(unittest.TestCase):
         """test has license"""
         github_client = GithubOrgClient("org_name")
         self.assertEqual(github_client.has_license(repo, license), result)
+
+
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """"""
+
+
 
 
 if __name__ == '__main__':
